@@ -15,17 +15,22 @@ public class PasswordHasher {
         return bytesToHex(hashedPassword);
     }
 
-    public static String generateHashedPassword(String password) throws Exception {
-
+    public static int getIterations(){
         Random random = new Random();
-
-        final int keyLength = 256;
-        int iterations = random.nextInt(10000);
-        byte[] salt = generateSalt();
-        byte[] hashedPassword = hashPassword(password, salt, iterations, keyLength);
-        System.out.println(bytesToHex(hashedPassword));
-        return bytesToHex(hashedPassword);
+        return random.nextInt(10000);
     }
+
+//    public static String generateHashedPassword(String password) throws Exception {
+//
+//        Random random = new Random();
+//
+//        final int keyLength = 256;
+//        int iterations = random.nextInt(10000);
+//        byte[] salt = generateSalt();
+//        byte[] hashedPassword = hashPassword(password, salt, iterations, keyLength);
+//        System.out.println(bytesToHex(hashedPassword));
+//        return bytesToHex(hashedPassword);
+//    }
 
     private static byte[] hashPassword(String password, byte[] salt, int iterations, int keyLength) throws Exception{
         PBEKeySpec spec = new PBEKeySpec(password.toCharArray(), salt, iterations, keyLength);
@@ -33,7 +38,7 @@ public class PasswordHasher {
         return factory.generateSecret(spec).getEncoded();
     }
 
-    private static byte[] generateSalt(){
+    public static byte[] generateSalt(){
         SecureRandom random = new SecureRandom();
         byte[] salt = new byte[16];
         random.nextBytes(salt);

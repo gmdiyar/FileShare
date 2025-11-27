@@ -18,7 +18,7 @@ public class LoginDAO {
 
         while(resultSet.next()){
             if (username.equals(resultSet.getString("username"))){
-                validatePassword(HashPassword(password, getIterationsFromDB(username), getSaltFromDB(username)));
+                validatePassword(HashPassword(password, getIterationsFromDB(username), getSaltByUsername(username)), username);
             }
         }
     }
@@ -30,46 +30,50 @@ public class LoginDAO {
                 "369369"
         );
 
-        Statement statement = connection.createStatement();
-        ResultSet resultSet = statement.executeQuery("SELECT iterations FROM password_hash");
+        PreparedStatement getIterationsByUsername = connection.prepareStatement("SELECT iterations FROM password_hash WHERE username = ?");
+        getIterationsByUsername.setString(1, username);
+        ResultSet rs = getIterationsByUsername.executeQuery();
 
-        int iterations = 0;
-        while(resultSet.next()){
-                iterations = resultSet.getInt("iterations");
+        if (rs.next()){
+            return rs.getInt("iterations");
+        } else {
+            throw new SQLException("User not found: " + username);
         }
-        return iterations;
     }
 
-    public static byte[] getSaltFromDB(String username) throws SQLException {
+    public static byte[] getSaltByUsername(String username) throws SQLException {
         Connection connection = DriverManager.getConnection(
                 "jdbc:mysql://127.0.0.1:3306/filesharemain",
                 "root",
                 "369369"
         );
 
-        Statement statement = connection.createStatement();
-        ResultSet resultSet = statement.executeQuery("SELECT salt FROM password_hash");
+        PreparedStatement getSaltByUsername = connection.prepareStatement("SELECT salt FROM password_hash WHERE username = ?");
+        getSaltByUsername.setString(1, username);
+        ResultSet rs = getSaltByUsername.executeQuery();
 
-        byte[] salt = new byte[0];
-        while(resultSet.next()){
-            salt = resultSet.getBytes("salt");
+        if (rs.next()){
+            return rs.getBytes("salt");
+        } else {
+            throw new SQLException("User not found: " + username);
         }
-        return salt;
     }
 
-    public static void validatePassword(String passwordHash) throws SQLException {
+    public static void validatePassword(String passwordHash, String username) throws SQLException {
         Connection connection = DriverManager.getConnection(
                 "jdbc:mysql://127.0.0.1:3306/filesharemain",
                 "root",
                 "369369"
         );
 
-        Statement statement = connection.createStatement();
-        ResultSet resultSet = statement.executeQuery("SELECT username FROM USERS");
+        PreparedStatement getPasswordHash = connection.prepareStatement("SELECT password_hash FROM password_hash WHERE username = ?");
+        getPasswordHash.setString(1, username);
+        ResultSet rs = getPasswordHash.executeQuery();
 
-        while(resultSet.next()){
-            if (passwordHash.equals(resultSet.getString("password_hash"))) {
-                //redirect to user dashboard
+        while(rs.next()){
+            if (passwordHash.equals(rs.getString("password_hash"))) {
+                System.out.println("welcome, " + username);
+                //TODO redirect to user dashboard
             }
         }
     }
