@@ -2,7 +2,7 @@ package project.fileshare.JDBC;
 
 import java.sql.*;
 
-import static project.fileshare.Tools.PasswordValidator.HashPassword;
+import static project.fileshare.Tools.PasswordHasher.HashPassword;
 
 public class LoginDAO {
 
@@ -18,12 +18,12 @@ public class LoginDAO {
 
         while(resultSet.next()){
             if (username.equals(resultSet.getString("username"))){
-                validatePassword(HashPassword(password, getIterationsFromDB(), getSaltFromDB()));
+                validatePassword(HashPassword(password, getIterationsFromDB(username), getSaltFromDB(username)));
             }
         }
     }
 
-    public static int getIterationsFromDB() throws SQLException {
+    public static int getIterationsFromDB(String username) throws SQLException {
         Connection connection = DriverManager.getConnection(
                 "jdbc:mysql://127.0.0.1:3306/filesharemain",
                 "root",
@@ -40,7 +40,7 @@ public class LoginDAO {
         return iterations;
     }
 
-    public static byte[] getSaltFromDB() throws SQLException {
+    public static byte[] getSaltFromDB(String username) throws SQLException {
         Connection connection = DriverManager.getConnection(
                 "jdbc:mysql://127.0.0.1:3306/filesharemain",
                 "root",
@@ -69,6 +69,7 @@ public class LoginDAO {
 
         while(resultSet.next()){
             if (passwordHash.equals(resultSet.getString("password_hash"))) {
+                //redirect to user dashboard
             }
         }
     }

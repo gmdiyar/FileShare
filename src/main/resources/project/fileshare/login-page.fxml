@@ -34,7 +34,7 @@
                      <VBox.margin>
                         <Insets />
                      </VBox.margin></Button>
-                  <Button fx:id="signUpButton" mnemonicParsing="false" onAction="#signUp" text="Sign up" />
+                  <Button fx:id="signUp" mnemonicParsing="false" onAction="#switchToSignUp" text="Sign up" />
                </children>
             </VBox>
             </children>

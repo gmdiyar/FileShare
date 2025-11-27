@@ -4,8 +4,9 @@ import javax.crypto.SecretKeyFactory;
 import javax.crypto.spec.PBEKeySpec;
 import java.security.SecureRandom;
 import java.util.Arrays;
+import java.util.Random;
 
-public class PasswordValidator {
+public class PasswordHasher {
 
     public static String HashPassword(String password, int iterations, byte[] salt) throws Exception {
         final int keyLength = 256;
@@ -15,14 +16,14 @@ public class PasswordValidator {
     }
 
     public static String generateHashedPassword(String password) throws Exception {
-        SecureRandom random = new SecureRandom();
+
+        Random random = new Random();
 
         final int keyLength = 256;
-        int iterations = random.nextInt();
+        int iterations = random.nextInt(10000);
         byte[] salt = generateSalt();
-        System.out.println(Arrays.toString(salt));
         byte[] hashedPassword = hashPassword(password, salt, iterations, keyLength);
-
+        System.out.println(bytesToHex(hashedPassword));
         return bytesToHex(hashedPassword);
     }
 
