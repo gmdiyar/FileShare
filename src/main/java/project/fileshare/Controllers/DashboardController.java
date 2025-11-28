@@ -9,4 +9,8 @@ public class DashboardController {
     public void press(ActionEvent actionEvent) {
         System.out.println("button been pressed ");
     }
+
+    public void logOut(ActionEvent actionEvent) {
+        SceneManager.getInstance().switchToLoginPage();
+    }
 }

@@ -1,8 +1,9 @@
 package project.fileshare.JDBC;
 
 import java.sql.*;
-
 import static project.fileshare.Tools.PasswordHasher.HashPassword;
+import project.fileshare.Controllers.LoginController.*;
+import project.fileshare.Controllers.SceneManager;
 
 public class LoginDAO {
 
@@ -72,9 +73,10 @@ public class LoginDAO {
 
         while(rs.next()){
             if (passwordHash.equals(rs.getString("password_hash"))) {
-                System.out.println("welcome, " + username);
-                //TODO redirect to user dashboard
+                SceneManager.getInstance().switchToDashboard();
             }
         }
     }
+
+
 }

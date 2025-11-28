@@ -5,12 +5,16 @@ import javafx.fxml.FXMLLoader;
 import javafx.scene.Parent;
 import javafx.scene.Scene;
 import javafx.stage.Stage;
+import project.fileshare.Controllers.SceneManager;
 
 import java.io.IOException;
 
 public class LoginPage extends Application {
     @Override
     public void start(Stage stage) throws IOException {
+
+        SceneManager.getInstance().setPrimaryStage(stage);
+
         try {
             Parent root = FXMLLoader.load(getClass().getResource("login-page.fxml"));
             Scene scene = new Scene(root);
