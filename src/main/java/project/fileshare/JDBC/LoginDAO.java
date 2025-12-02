@@ -1,7 +1,9 @@
 package project.fileshare.JDBC;
 
 import java.sql.*;
+
 import static project.fileshare.Tools.PasswordHasher.HashPassword;
+import project.fileshare.Controllers.DashboardController;
 import project.fileshare.Controllers.LoginController.*;
 import project.fileshare.Controllers.SceneManager;
 
@@ -68,11 +70,18 @@ public class LoginDAO {
         );
 
         PreparedStatement getPasswordHash = connection.prepareStatement("SELECT password_hash FROM password_hash WHERE username = ?");
-        getPasswordHash.setString(1, username);
-        ResultSet rs = getPasswordHash.executeQuery();
+        PreparedStatement getUserId = connection.prepareStatement("SELECT user_id FROM users WHERE username = ?");
 
-        while(rs.next()){
-            if (passwordHash.equals(rs.getString("password_hash"))) {
+        getPasswordHash.setString(1, username);
+        getUserId.setString(1, username);
+
+
+        ResultSet hashes = getPasswordHash.executeQuery();
+        ResultSet userId = getUserId.executeQuery();
+
+        while(hashes.next() && userId.next()){
+            if (passwordHash.equals(hashes.getString("password_hash"))) {
+                SceneManager.userIdForManager = userId.getInt("user_id");
                 SceneManager.getInstance().switchToDashboard();
             }
         }

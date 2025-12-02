@@ -1,6 +1,10 @@
 <?xml version="1.0" encoding="UTF-8"?>
 
+<?import javafx.geometry.Insets?>
 <?import javafx.scene.control.Button?>
+<?import javafx.scene.control.TableColumn?>
+<?import javafx.scene.control.TableView?>
+<?import javafx.scene.control.ToolBar?>
 <?import javafx.scene.layout.AnchorPane?>
 <?import javafx.scene.layout.BorderPane?>
 
@@ -8,8 +12,25 @@
    <children>
       <BorderPane prefHeight="600.0" prefWidth="800.0">
          <bottom>
-            <Button mnemonicParsing="false" onAction="#logOut" text="log out" BorderPane.alignment="CENTER" />
+            <ToolBar prefHeight="40.0" prefWidth="200.0" BorderPane.alignment="CENTER">
+              <items>
+                  <Button mnemonicParsing="false" onAction="#logOut" text="log out" />
+                <Button mnemonicParsing="false" onAction="#shareMenu" text="Share File" />
+              </items>
+            </ToolBar>
          </bottom>
+         <center>
+            <TableView fx:id="filesTable" prefHeight="320.0" prefWidth="555.0" BorderPane.alignment="CENTER">
+              <columns>
+                <TableColumn fx:id="fileTableType" prefWidth="36.0" text="Type" />
+                <TableColumn fx:id="fileTableName" prefWidth="111.0" text="Name" />
+                  <TableColumn fx:id="fileTableSize" prefWidth="33.0" text="Size" />
+              </columns>
+               <BorderPane.margin>
+                  <Insets bottom="50.0" left="100.0" right="100.0" top="50.0" />
+               </BorderPane.margin>
+            </TableView>
+         </center>
       </BorderPane>
    </children>
 </AnchorPane>

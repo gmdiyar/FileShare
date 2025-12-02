@@ -6,8 +6,12 @@ import javafx.scene.Scene;
 import javafx.stage.Stage;
 
 import java.io.IOException;
+import java.sql.SQLException;
 
 public class SceneManager {
+
+    public static int userIdForManager = 0;
+
     private static SceneManager instance;
     private Stage primaryStage;
 
@@ -33,7 +37,22 @@ public class SceneManager {
     }
 
     public void switchToDashboard() {
-        switchToScene("/project/fileshare/dashboard.fxml");
+        try {
+            FXMLLoader loader = new FXMLLoader(getClass().getResource("/project/fileshare/dashboard.fxml"));
+            Parent root = loader.load();
+
+            DashboardController controller = loader.getController();
+            controller.populateTable(userIdForManager);
+
+            Scene newScene = new Scene(root);
+            primaryStage.setScene(newScene);
+        } catch (IOException e) {
+            System.out.println("failed to load: "+ "/project/fileshare/dashboard.fxml");
+            e.printStackTrace();
+        } catch (Exception e) {
+            System.out.println("Error populating dashboard:");
+            throw new RuntimeException(e);
+        }
     }
 
     public void switchToScene(String fxmlFile){
