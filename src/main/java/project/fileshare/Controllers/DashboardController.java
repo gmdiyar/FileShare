@@ -1,18 +1,21 @@
 package project.fileshare.Controllers;
 
+import javafx.beans.binding.Bindings;
 import javafx.beans.property.SimpleStringProperty;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
+import javafx.scene.control.ContextMenu;
+import javafx.scene.control.MenuItem;
 import javafx.scene.control.TableColumn;
+import javafx.scene.control.TableRow;
 import javafx.scene.control.TableView;
 
 import java.sql.SQLException;
 import java.util.List;
 
 import static project.fileshare.JDBC.FilesDAO.*;
-import static project.fileshare.JDBC.FilesDAO.getFileType;
 
 public class DashboardController {
     public static class FileEntry{
@@ -40,6 +43,56 @@ public class DashboardController {
     @FXML
     public TableColumn<FileEntry, String> fileTableSize;
 
+    @FXML
+    public void initialize() {
+        // Create the context menu
+        ContextMenu contextMenu = new ContextMenu();
+
+        // Create menu items
+        MenuItem deleteItem = new MenuItem("Delete");
+        MenuItem shareItem = new MenuItem("Share with...");
+        MenuItem detailsItem = new MenuItem("Details");
+
+        // Set up event handlers
+        deleteItem.setOnAction(event -> {
+            FileEntry selectedFile = filesTable.getSelectionModel().getSelectedItem();
+            if (selectedFile != null) {
+                handleDelete(selectedFile);
+            }
+        });
+
+        shareItem.setOnAction(event -> {
+            FileEntry selectedFile = filesTable.getSelectionModel().getSelectedItem();
+            if (selectedFile != null) {
+                handleShare(selectedFile);
+            }
+        });
+
+        detailsItem.setOnAction(event -> {
+            FileEntry selectedFile = filesTable.getSelectionModel().getSelectedItem();
+            if (selectedFile != null) {
+                handleDetails(selectedFile);
+            }
+        });
+
+        // Add items to menu
+        contextMenu.getItems().addAll(deleteItem, shareItem, detailsItem);
+
+        // Attach context menu to table rows
+        filesTable.setRowFactory(tv -> {
+            TableRow<FileEntry> row = new TableRow<>();
+            row.setContextMenu(contextMenu);
+
+            // Only show menu on non-empty rows
+            row.contextMenuProperty().bind(
+                    Bindings.when(row.emptyProperty())
+                            .then((ContextMenu) null)
+                            .otherwise(contextMenu)
+            );
+
+            return row;
+        });
+    }
 
     public void populateTable(int id) throws SQLException {
 
@@ -59,6 +112,22 @@ public class DashboardController {
 
         filesTable.setItems(files);
 
+    }
+
+    // Handler methods
+    private void handleDelete(FileEntry file) {
+        // TODO: Delete from database and refresh table
+        System.out.println("Delete: " + file.getFileName());
+    }
+
+    private void handleShare(FileEntry file) {
+        // TODO: Open share dialog
+        System.out.println("Share: " + file.getFileName());
+    }
+
+    private void handleDetails(FileEntry file) {
+        // TODO: Show file details
+        System.out.println("Details: " + file.getFileName());
     }
 
     public void shareMenu(ActionEvent actionEvent) {

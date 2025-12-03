@@ -20,7 +20,7 @@
             </ToolBar>
          </bottom>
          <center>
-            <TableView fx:id="filesTable" prefHeight="320.0" prefWidth="555.0" BorderPane.alignment="CENTER">
+            <TableView fx:id="filesTable" prefHeight="460.0" prefWidth="624.0" BorderPane.alignment="CENTER">
               <columns>
                 <TableColumn fx:id="fileTableType" prefWidth="36.0" text="Type" />
                 <TableColumn fx:id="fileTableName" prefWidth="111.0" text="Name" />
