@@ -15,7 +15,6 @@
             <ToolBar prefHeight="40.0" prefWidth="200.0" BorderPane.alignment="CENTER">
               <items>
                   <Button mnemonicParsing="false" onAction="#logOut" text="log out" />
-                <Button mnemonicParsing="false" onAction="#shareMenu" text="Share File" />
               </items>
             </ToolBar>
          </bottom>
@@ -31,6 +30,13 @@
                </BorderPane.margin>
             </TableView>
          </center>
+         <top>
+            <Button mnemonicParsing="false" onAction="#uploadFile" prefHeight="25.0" prefWidth="76.0" text="Upload File" textAlignment="CENTER" translateX="5.0" translateY="44.0" BorderPane.alignment="TOP_LEFT">
+               <BorderPane.margin>
+                  <Insets left="96.0" top="6.0" />
+               </BorderPane.margin>
+            </Button>
+         </top>
       </BorderPane>
    </children>
 </AnchorPane>

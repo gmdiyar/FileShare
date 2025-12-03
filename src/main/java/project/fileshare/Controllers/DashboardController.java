@@ -11,13 +11,17 @@ import javafx.scene.control.MenuItem;
 import javafx.scene.control.TableColumn;
 import javafx.scene.control.TableRow;
 import javafx.scene.control.TableView;
+import javafx.stage.FileChooser;
 
+import java.io.File;
 import java.sql.SQLException;
 import java.util.List;
 
+import static project.fileshare.Controllers.SceneManager.userIdForManager;
 import static project.fileshare.JDBC.FilesDAO.*;
 
 public class DashboardController {
+
     public static class FileEntry{
 
         private final String fileName;
@@ -45,15 +49,13 @@ public class DashboardController {
 
     @FXML
     public void initialize() {
-        // Create the context menu
+
         ContextMenu contextMenu = new ContextMenu();
 
-        // Create menu items
         MenuItem deleteItem = new MenuItem("Delete");
         MenuItem shareItem = new MenuItem("Share with...");
         MenuItem detailsItem = new MenuItem("Details");
 
-        // Set up event handlers
         deleteItem.setOnAction(event -> {
             FileEntry selectedFile = filesTable.getSelectionModel().getSelectedItem();
             if (selectedFile != null) {
@@ -75,15 +77,12 @@ public class DashboardController {
             }
         });
 
-        // Add items to menu
         contextMenu.getItems().addAll(deleteItem, shareItem, detailsItem);
 
-        // Attach context menu to table rows
         filesTable.setRowFactory(tv -> {
             TableRow<FileEntry> row = new TableRow<>();
             row.setContextMenu(contextMenu);
 
-            // Only show menu on non-empty rows
             row.contextMenuProperty().bind(
                     Bindings.when(row.emptyProperty())
                             .then((ContextMenu) null)
@@ -114,7 +113,27 @@ public class DashboardController {
 
     }
 
-    // Handler methods
+    private String getFileExtension(File file) {
+        String fileName = file.getName();
+        int lastIndexOf = fileName.lastIndexOf(".");
+        if (lastIndexOf == -1) {
+            return "";
+        }
+        return fileName.substring(lastIndexOf + 1);
+    }
+
+    public void uploadFile(ActionEvent actionEvent) throws SQLException {
+        FileChooser fileChooser = new FileChooser();
+        File file = fileChooser.showOpenDialog(null);
+        if (file != null){
+        uploadFileInfo(file.getName(),
+                file.getAbsolutePath(),
+                getFileExtension(file),
+                file.length(),
+                userIdForManager);
+        } populateTable(userIdForManager);
+    }
+
     private void handleDelete(FileEntry file) {
         // TODO: Delete from database and refresh table
         System.out.println("Delete: " + file.getFileName());

@@ -19,9 +19,11 @@ public class FilesDAO {
         getFileNames.setInt(1, userId);
         ResultSet rs = getFileNames.executeQuery();
 
-        if (rs.next()){
-            fileNames.add(rs.getString("file_name"));
-        } else {
+        try {
+            while (rs.next()){
+                fileNames.add(rs.getString("file_name"));
+            }
+        } catch (SQLException e) {
             throw new SQLException("User not found: " + userId);
         }
         return fileNames;
@@ -40,9 +42,11 @@ public class FilesDAO {
         getFileTypes.setInt(1, userId);
         ResultSet rs = getFileTypes.executeQuery();
 
-        if (rs.next()){
-            fileTypes.add(rs.getString("type"));
-        } else {
+        try {
+            while (rs.next()){
+                fileTypes.add(rs.getString("type"));
+            }
+        } catch (SQLException e) {
             throw new SQLException("User not found: " + userId);
         }
         return fileTypes;
@@ -61,11 +65,36 @@ public class FilesDAO {
         getFileSizes.setInt(1, userId);
         ResultSet rs = getFileSizes.executeQuery();
 
-        if (rs.next()){
-            fileSizes.add(rs.getString("size"));
-        } else {
+        try {
+            while (rs.next()){
+                fileSizes.add(rs.getString("size"));
+            }
+        } catch (SQLException e) {
             throw new SQLException("User not found: " + userId);
         }
         return fileSizes;
     }
+
+    public static void uploadFileInfo(String name, String path, String type, long size, int owner_id) throws SQLException {
+        Connection connection = DriverManager.getConnection(
+                "jdbc:mysql://127.0.0.1:3306/filesharemain",
+                "root",
+                "369369"
+        );
+
+        PreparedStatement ps = connection.prepareStatement("insert into files(file_name, file_path, type, size, owner) values (?, ?, ?, ?, ?)");
+        ps.setString(1, name);
+        ps.setString(2, path);
+        ps.setString(3, type);
+        ps.setLong(4, size);
+        ps.setInt(5, owner_id);
+
+        try {
+            ps.executeUpdate();
+        } catch (SQLException e) {
+            System.out.println("Cant upload file info into SQL database:" + e);
+            throw new RuntimeException(e);
+        }
+    }
 }
+
