@@ -1,14 +1,15 @@
 package project.fileshare.Tools;
 
 public class Rules {
-    static String disallowedChars = "!@#$%^&*()~|}{\":?><";
+    static String disallowedChars = " !@#$%^&*()~|}{\":?><";
+    static String disallowedPasswordChars = " ";
 
     public static boolean ensureUsername(String username){
         return !username.contains(disallowedChars);
     }
-//    public static boolean ensureEmail(String email){
-//        tbd
-//    }
+    public static boolean ensurePassword(String password){
+        return !password.contains(disallowedPasswordChars);
+    }
 
-    //password one too
+    //email one too
 }

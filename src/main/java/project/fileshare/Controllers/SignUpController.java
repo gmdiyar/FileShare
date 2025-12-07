@@ -13,6 +13,7 @@ import java.io.IOException;
 import java.util.Objects;
 
 import static project.fileshare.Tools.PasswordHasher.*;
+import static project.fileshare.Tools.Rules.ensurePassword;
 import static project.fileshare.Tools.Rules.ensureUsername;
 import static project.fileshare.JDBC.SignupDAO.trySignUp;
 public class SignUpController {
@@ -24,7 +25,7 @@ public class SignUpController {
     public PasswordField passwordTwo;
 
     public void signUp(ActionEvent actionEvent) throws Exception {
-        if (ensureUsername(usernameField.getText()) && passwordOne.getText().equals(passwordTwo.getText())){
+        if (ensureUsername(usernameField.getText()) && ensurePassword(passwordOne.getText()) && passwordOne.getText().equals(passwordTwo.getText())){
             int iterations = getIterations();
             byte[] salt = generateSalt();
             trySignUp(usernameField.getText(), emailField.getText(), HashPassword(passwordOne.getText(), iterations, salt), iterations, salt);

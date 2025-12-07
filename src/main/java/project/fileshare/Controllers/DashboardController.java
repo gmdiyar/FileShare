@@ -6,14 +6,22 @@ import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
+import javafx.fxml.FXMLLoader;
+import javafx.scene.Parent;
+import javafx.scene.Scene;
 import javafx.scene.control.ContextMenu;
 import javafx.scene.control.MenuItem;
 import javafx.scene.control.TableColumn;
 import javafx.scene.control.TableRow;
 import javafx.scene.control.TableView;
 import javafx.stage.FileChooser;
+import javafx.stage.Modality;
+import javafx.stage.Stage;
 
 import java.io.File;
+import java.sql.Connection;
+import java.sql.DriverManager;
+import java.sql.PreparedStatement;
 import java.sql.SQLException;
 import java.util.List;
 
@@ -59,7 +67,11 @@ public class DashboardController {
         deleteItem.setOnAction(event -> {
             FileEntry selectedFile = filesTable.getSelectionModel().getSelectedItem();
             if (selectedFile != null) {
-                handleDelete(selectedFile);
+                try {
+                    handleDelete(selectedFile);
+                } catch (SQLException e) {
+                    throw new RuntimeException(e);
+                }
             }
         });
 
@@ -134,23 +146,47 @@ public class DashboardController {
         } populateTable(userIdForManager);
     }
 
-    private void handleDelete(FileEntry file) {
-        // TODO: Delete from database and refresh table
-        System.out.println("Delete: " + file.getFileName());
+    private void handleDelete(FileEntry file) throws SQLException {
+        Connection connection = DriverManager.getConnection(
+                "jdbc:mysql://127.0.0.1:3306/filesharemain",
+                "root",
+                "369369"
+        );
+
+        PreparedStatement ps = connection.prepareStatement("delete from files where file_name = ?");
+        ps.setString(1, file.getFileName());
+        ps.executeUpdate();
+        populateTable(userIdForManager);
+        System.out.println("Deleted: " + file.getFileName());
+
+        connection.close();
     }
 
     private void handleShare(FileEntry file) {
-        // TODO: Open share dialog
-        System.out.println("Share: " + file.getFileName());
+        try{
+            FXMLLoader loader = new FXMLLoader(getClass().getResource("/project/fileshare/share-dialog.fxml"));
+            Parent root = loader.load();
+            ShareMenuController controller = loader.getController();
+            controller.setFile(file);
+
+            Stage dialogStage = new Stage();
+            controller.setDialogStage(dialogStage);
+
+            dialogStage.setTitle("Share file");
+            dialogStage.setScene(new Scene(root));
+            dialogStage.initModality(Modality.APPLICATION_MODAL);
+            dialogStage.showAndWait();
+
+            populateTable(userIdForManager);
+
+        } catch (Exception e){
+            e.printStackTrace();
+        }
     }
 
     private void handleDetails(FileEntry file) {
         // TODO: Show file details
         System.out.println("Details: " + file.getFileName());
-    }
-
-    public void shareMenu(ActionEvent actionEvent) {
-        //todo
     }
 
     public void logOut(ActionEvent actionEvent) {

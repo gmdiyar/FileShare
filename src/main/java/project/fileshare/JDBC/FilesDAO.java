@@ -94,6 +94,8 @@ public class FilesDAO {
         } catch (SQLException e) {
             System.out.println("Cant upload file info into SQL database:" + e);
             throw new RuntimeException(e);
+        } finally {
+            connection.close();
         }
     }
 }
