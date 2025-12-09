@@ -3,7 +3,6 @@ package project.fileshare.JDBC;
 import java.sql.*;
 
 import static project.fileshare.Tools.PasswordHasher.HashPassword;
-import project.fileshare.Controllers.DashboardController;
 import project.fileshare.Controllers.LoginController.*;
 import project.fileshare.Controllers.SceneManager;
 

@@ -1,5 +1,8 @@
 package project.fileshare.JDBC;
 
+import java.io.File;
+import java.io.FileInputStream;
+import java.io.IOException;
 import java.sql.*;
 import java.util.ArrayList;
 import java.util.List;
@@ -98,5 +101,39 @@ public class FilesDAO {
             connection.close();
         }
     }
-}
 
+    public static void uploadFileInfoWithBlob(String name, String path, String type, long size, int owner_id, File file) throws SQLException, IOException {
+        Connection connection = DriverManager.getConnection(
+                "jdbc:mysql://127.0.0.1:3306/filesharemain",
+                "root",
+                "369369"
+        );
+
+        PreparedStatement ps = connection.prepareStatement(
+                "insert into files(file_name, file_path, type, size, owner, file_data) values (?, ?, ?, ?, ?, ?)"
+        );
+
+        ps.setString(1, name);
+        ps.setString(2, path);
+        ps.setString(3, type);
+        ps.setString(4, formatFileSize(size));
+        ps.setInt(5, owner_id);
+
+        try (FileInputStream fis = new FileInputStream(file)) {
+            ps.setBinaryStream(6, fis, (int) file.length());
+            ps.executeUpdate();
+        } catch (SQLException e) {
+            System.out.println("Can't upload file info into SQL database: " + e);
+            throw new RuntimeException(e);
+        } finally {
+            connection.close();
+        }
+    }
+
+    private static String formatFileSize(long size) {
+        if (size < 1024) return size + " B";
+        int z = (63 - Long.numberOfLeadingZeros(size)) / 10;
+        return String.format("%.1f %sB", (double) size / (1L << (z * 10)), " KMGTPE".charAt(z));
+    }
+
+}
