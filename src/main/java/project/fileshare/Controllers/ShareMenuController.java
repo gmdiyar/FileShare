@@ -27,9 +27,6 @@ public class ShareMenuController {
 
     @FXML
     public void handleShareButton(ActionEvent actionEvent) throws SQLException {
-        System.out.println(file.getFileName());
-        System.out.println(shareWithField.getText());
-        System.out.println(getIdFromUsername(shareWithField.getText()));
         try {
             shareFile(getFileID(file.getFileName(), userIdForManager), getIdFromUsername(shareWithField.getText()), "read", userIdForManager);
         } catch (SQLException e) {

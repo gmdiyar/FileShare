@@ -57,7 +57,11 @@ public class FilesShareDAO {
         ps.setString(3, permission);
         ps.setInt(4, ownerID);
 
-        ps.executeUpdate();
+        try {
+            ps.executeUpdate();
+        } catch (SQLException e) {
+            System.out.println("Error sharing file. File might already be shared or username is incorrect: " + e);
+        }
 
         connection.close();
     }
