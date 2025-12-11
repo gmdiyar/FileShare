@@ -27,9 +27,11 @@ import java.sql.PreparedStatement;
 import java.sql.SQLException;
 import java.util.List;
 
+import static com.mysql.cj.conf.PropertyKey.PASSWORD;
 import static project.fileshare.Controllers.SceneManager.userIdForManager;
 import static project.fileshare.JDBC.FilesDAO.*;
 import static project.fileshare.JDBC.FilesShareDAO.*;
+import static project.fileshare.JDBC.LoginDAO.*;
 
 public class DashboardController {
 
@@ -241,9 +243,9 @@ public class DashboardController {
 
     private void handleDelete(FileEntry file) throws SQLException {
         Connection connection = DriverManager.getConnection(
-                "jdbc:mysql://127.0.0.1:3306/filesharemain",
-                "root",
-                "369369"
+                URL,
+                USER,
+                SQL_PASSWORD
         );
 
         PreparedStatement ps = connection.prepareStatement("delete from files where file_name = ?");

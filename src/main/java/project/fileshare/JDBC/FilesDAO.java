@@ -7,13 +7,15 @@ import java.sql.*;
 import java.util.ArrayList;
 import java.util.List;
 
+import static project.fileshare.JDBC.LoginDAO.*;
+
 public class FilesDAO {
 
     public static List<String> getFileName(int userId) throws SQLException {
         Connection connection = DriverManager.getConnection(
-                "jdbc:mysql://127.0.0.1:3306/filesharemain",
-                "root",
-                "369369"
+                URL,
+                USER,
+                SQL_PASSWORD
         );
 
         List<String> fileNames = new ArrayList<String>();
@@ -34,9 +36,9 @@ public class FilesDAO {
 
     public static List<String> getFileType(int userId) throws SQLException {
         Connection connection = DriverManager.getConnection(
-                "jdbc:mysql://127.0.0.1:3306/filesharemain",
-                "root",
-                "369369"
+                URL,
+                USER,
+                SQL_PASSWORD
         );
 
         List<String> fileTypes = new ArrayList<String>();
@@ -57,9 +59,9 @@ public class FilesDAO {
 
     public static List<String> getFileSize(int userId) throws SQLException {
         Connection connection = DriverManager.getConnection(
-                "jdbc:mysql://127.0.0.1:3306/filesharemain",
-                "root",
-                "369369"
+                URL,
+                USER,
+                SQL_PASSWORD
         );
 
         List<String> fileSizes = new ArrayList<String>();
@@ -80,9 +82,9 @@ public class FilesDAO {
 
     public static void uploadFileInfo(String name, String path, String type, long size, int owner_id) throws SQLException {
         Connection connection = DriverManager.getConnection(
-                "jdbc:mysql://127.0.0.1:3306/filesharemain",
-                "root",
-                "369369"
+                URL,
+                USER,
+                SQL_PASSWORD
         );
 
         PreparedStatement ps = connection.prepareStatement("insert into files(file_name, file_path, type, size, owner) values (?, ?, ?, ?, ?)");
@@ -104,9 +106,9 @@ public class FilesDAO {
 
     public static void uploadFileInfoWithBlob(String name, String path, String type, long size, int owner_id, File file) throws SQLException, IOException {
         Connection connection = DriverManager.getConnection(
-                "jdbc:mysql://127.0.0.1:3306/filesharemain",
-                "root",
-                "369369"
+                URL,
+                USER,
+                SQL_PASSWORD
         );
 
         PreparedStatement ps = connection.prepareStatement(

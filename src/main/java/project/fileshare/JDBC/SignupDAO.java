@@ -3,11 +3,13 @@ package project.fileshare.JDBC;
 import java.sql.*;
 import java.util.regex.Pattern;
 
+import static project.fileshare.JDBC.LoginDAO.*;
+
 public class SignupDAO {
 
-    private static final String DB_URL = "jdbc:mysql://127.0.0.1:3306/filesharemain";
-    private static final String DB_USER = "root";
-    private static final String DB_PASSWORD = "369369";
+    private static final String DB_URL = URL;
+    private static final String DB_USER = USER;
+    private static final String DB_PASSWORD = SQL_PASSWORD;
 
     private static final Pattern EMAIL_PATTERN = Pattern.compile(
             "^[A-Za-z0-9+_.-]+@[A-Za-z0-9.-]+\\.[A-Za-z]{2,}$"

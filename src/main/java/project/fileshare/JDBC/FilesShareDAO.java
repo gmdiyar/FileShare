@@ -4,13 +4,17 @@ import java.sql.*;
 import java.util.ArrayList;
 import java.util.List;
 
+import static project.fileshare.JDBC.LoginDAO.SQL_PASSWORD;
+import static project.fileshare.JDBC.LoginDAO.URL;
+import static project.fileshare.JDBC.LoginDAO.USER;
+
 public class FilesShareDAO {
 
     public static int getFileID(String fileName, int ownerID) throws SQLException {
         Connection connection = DriverManager.getConnection(
-                "jdbc:mysql://127.0.0.1:3306/filesharemain",
-                "root",
-                "369369"
+                URL,
+                USER,
+                SQL_PASSWORD
         );
 
         PreparedStatement ps = connection.prepareStatement("select file_id from files where file_name = ? and owner = ?");
@@ -27,9 +31,9 @@ public class FilesShareDAO {
 
     public static int getIdFromUsername(String username) throws SQLException {
         Connection connection = DriverManager.getConnection(
-                "jdbc:mysql://127.0.0.1:3306/filesharemain",
-                "root",
-                "369369"
+                URL,
+                USER,
+                SQL_PASSWORD
         );
 
         PreparedStatement ps = connection.prepareStatement("select user_id from users where username = ?");
@@ -46,9 +50,9 @@ public class FilesShareDAO {
     public static void shareFile(int fileID, int sharedWithID, String permission, int ownerID) throws SQLException {
 
         Connection connection = DriverManager.getConnection(
-                "jdbc:mysql://127.0.0.1:3306/filesharemain",
-                "root",
-                "369369"
+                URL,
+                USER,
+                SQL_PASSWORD
         );
 
         PreparedStatement ps = connection.prepareStatement("insert into file_shares(file_id, shared_with, permissions, owner_id) values(?, ?, ?, ?)");
@@ -68,9 +72,9 @@ public class FilesShareDAO {
 
     public static List<String> getSharedFileNames(int userId) throws SQLException {
         Connection connection = DriverManager.getConnection(
-                "jdbc:mysql://127.0.0.1:3306/filesharemain",
-                "root",
-                "369369"
+                URL,
+                USER,
+                SQL_PASSWORD
         );
 
         PreparedStatement ps = connection.prepareStatement(
@@ -91,9 +95,9 @@ public class FilesShareDAO {
 
     public static List<String> getSharedFileTypes(int userId) throws SQLException {
         Connection connection = DriverManager.getConnection(
-                "jdbc:mysql://127.0.0.1:3306/filesharemain",
-                "root",
-                "369369"
+                URL,
+                USER,
+                SQL_PASSWORD
         );
 
         PreparedStatement ps = connection.prepareStatement(
@@ -114,9 +118,9 @@ public class FilesShareDAO {
 
     public static List<String> getSharedFileSizes(int userId) throws SQLException {
         Connection connection = DriverManager.getConnection(
-                "jdbc:mysql://127.0.0.1:3306/filesharemain",
-                "root",
-                "369369"
+                URL,
+                USER,
+                SQL_PASSWORD
         );
 
         PreparedStatement ps = connection.prepareStatement(
@@ -138,9 +142,9 @@ public class FilesShareDAO {
 
     public static List<String> getSharedFileOwners(int userId) throws SQLException {
         Connection connection = DriverManager.getConnection(
-                "jdbc:mysql://127.0.0.1:3306/filesharemain",
-                "root",
-                "369369"
+                URL,
+                USER,
+                SQL_PASSWORD
         );
 
         PreparedStatement ps = connection.prepareStatement(
@@ -161,9 +165,9 @@ public class FilesShareDAO {
 
     public static List<String> getSharedFilePermissions(int userId) throws SQLException {
         Connection connection = DriverManager.getConnection(
-                "jdbc:mysql://127.0.0.1:3306/filesharemain",
-                "root",
-                "369369"
+                URL,
+                USER,
+                SQL_PASSWORD
         );
 
         PreparedStatement ps = connection.prepareStatement(
@@ -189,9 +193,9 @@ public class FilesShareDAO {
 
     public static byte[] getFileData(String fileName, int userId) throws SQLException {
         Connection connection = DriverManager.getConnection(
-                "jdbc:mysql://127.0.0.1:3306/filesharemain",
-                "root",
-                "369369"
+                URL,
+                USER,
+                SQL_PASSWORD
         );
 
         PreparedStatement ps = connection.prepareStatement(
@@ -211,9 +215,9 @@ public class FilesShareDAO {
 
     public static byte[] getSharedFileData(String fileName, int sharedWithUserId) throws SQLException {
         Connection connection = DriverManager.getConnection(
-                "jdbc:mysql://127.0.0.1:3306/filesharemain",
-                "root",
-                "369369"
+                URL,
+                USER,
+                SQL_PASSWORD
         );
 
         PreparedStatement ps = connection.prepareStatement(
@@ -235,9 +239,9 @@ public class FilesShareDAO {
 
     public static String getFilePath(String fileName, int userId) throws SQLException {
         Connection connection = DriverManager.getConnection(
-                "jdbc:mysql://127.0.0.1:3306/filesharemain",
-                "root",
-                "369369"
+                URL,
+                USER,
+                SQL_PASSWORD
         );
 
         PreparedStatement ps = connection.prepareStatement(
@@ -257,9 +261,9 @@ public class FilesShareDAO {
 
     public static String getSharedFilePath(String fileName, int sharedWithUserId) throws SQLException {
         Connection connection = DriverManager.getConnection(
-                "jdbc:mysql://127.0.0.1:3306/filesharemain",
-                "root",
-                "369369"
+                URL,
+                USER,
+                SQL_PASSWORD
         );
 
         PreparedStatement ps = connection.prepareStatement(
