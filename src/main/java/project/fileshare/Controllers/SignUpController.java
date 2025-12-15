@@ -16,13 +16,19 @@ import static project.fileshare.Tools.PasswordHasher.*;
 import static project.fileshare.Tools.Rules.ensurePassword;
 import static project.fileshare.Tools.Rules.ensureUsername;
 import static project.fileshare.JDBC.SignupDAO.trySignUp;
+
 public class SignUpController {
 
+    // References to the FXML text and password fields.
 
     public TextField usernameField;
     public TextField emailField;
     public PasswordField passwordOne;
     public PasswordField passwordTwo;
+
+    /// Sign up button method that is called upon the button being pressed.
+    /// Verifies that username and password strings meet requirements before
+    /// hashing the password and saving info to the database.
 
     public void signUp(ActionEvent actionEvent) throws Exception {
         if (ensureUsername(usernameField.getText()) && ensurePassword(passwordOne.getText()) && passwordOne.getText().equals(passwordTwo.getText())){
@@ -30,9 +36,11 @@ public class SignUpController {
             byte[] salt = generateSalt();
             trySignUp(usernameField.getText(), emailField.getText(), HashPassword(passwordOne.getText(), iterations, salt), iterations, salt);
         } else{
-            System.out.println("cant sign up");
+            System.out.println("Can't sign up");
         }
     }
+
+    // Sends user back to login-page view upon 'login' button being pressed.
 
     public void backToLogin(ActionEvent event) throws IOException {
         Parent root = FXMLLoader.load(Objects.requireNonNull(getClass().getResource("/project/fileshare/login-page.fxml")));

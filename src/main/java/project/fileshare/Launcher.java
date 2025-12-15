@@ -1,3 +1,5 @@
+// Actual entrance method into the app, calls everything from LoginPage
+
 package project.fileshare;
 
 import javafx.application.Application;
