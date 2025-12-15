@@ -9,6 +9,7 @@ import javafx.scene.control.TextField;
 import javafx.event.ActionEvent;
 import javafx.stage.Stage;
 import project.fileshare.JDBC.LoginDAO;
+
 import java.io.IOException;
 import java.util.Objects;
 
@@ -19,14 +20,18 @@ public class LoginController {
     @FXML
     private TextField passwordField;
 
+    // Logic is handled by the DAO for the most part since it's verification.
+    // Gets the username and password strings from the text fields and tries to validate login.
+
     @FXML
     public void loginButton(ActionEvent event) throws Exception {
-
         String username = usernameField.getText();
         String password = passwordField.getText();
 
         LoginDAO.validateLogin(username, password);
     }
+
+    // Switches user to the sign-up fxml view upon press of the 'sign up' button.
 
     @FXML
     void switchToSignUp(ActionEvent event) throws IOException {
@@ -37,7 +42,7 @@ public class LoginController {
             stage.setScene(scene);
             stage.show();
         } catch (IOException e) {
-            System.out.println("failed to initialize new scene.");
+            System.out.println("Failed to initialize new scene.");
             e.printStackTrace();
             throw new RuntimeException(e);
         }

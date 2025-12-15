@@ -10,6 +10,9 @@ import static project.fileshare.JDBC.LoginDAO.USER;
 
 public class FilesShareDAO {
 
+    // Gets the file ID from the database by matching the file name and owner ID.
+    // Returns 0 if no match is found.
+
     public static int getFileID(String fileName, int ownerID) throws SQLException {
         Connection connection = DriverManager.getConnection(
                 URL,
@@ -29,6 +32,9 @@ public class FilesShareDAO {
         return fileID;
     }
 
+    // Gets a user's ID by looking up their username in the users table.
+    // Returns 0 if the username doesn't exist.
+
     public static int getIdFromUsername(String username) throws SQLException {
         Connection connection = DriverManager.getConnection(
                 URL,
@@ -46,6 +52,10 @@ public class FilesShareDAO {
         } connection.close();
         return userID;
     }
+
+    // Inserts a new record into the file_shares table, creating a sharing relationship between
+    // the file owner and the user the file is being shared with. Includes permission level
+    // (like "read" or "write") for access control.
 
     public static void shareFile(int fileID, int sharedWithID, String permission, int ownerID) throws SQLException {
 
@@ -70,6 +80,9 @@ public class FilesShareDAO {
         connection.close();
     }
 
+    // Retrieves all file names that have been shared with a specific user.
+    // Uses a join between file_shares and files tables to get the actual file names.
+
     public static List<String> getSharedFileNames(int userId) throws SQLException {
         Connection connection = DriverManager.getConnection(
                 URL,
@@ -93,6 +106,8 @@ public class FilesShareDAO {
         return fileNames;
     }
 
+    // Does the same thing as getSharedFileNames but retrieves file types instead.
+
     public static List<String> getSharedFileTypes(int userId) throws SQLException {
         Connection connection = DriverManager.getConnection(
                 URL,
@@ -115,6 +130,8 @@ public class FilesShareDAO {
         connection.close();
         return fileTypes;
     }
+
+    // Does the same thing as getSharedFileNames but retrieves file sizes instead.
 
     public static List<String> getSharedFileSizes(int userId) throws SQLException {
         Connection connection = DriverManager.getConnection(
@@ -140,6 +157,9 @@ public class FilesShareDAO {
         return fileSizes;
     }
 
+    // Gets the usernames of all the people who have shared files with a specific user.
+    // Joins file_shares with users table to get the owner's username.
+
     public static List<String> getSharedFileOwners(int userId) throws SQLException {
         Connection connection = DriverManager.getConnection(
                 URL,
@@ -163,6 +183,9 @@ public class FilesShareDAO {
         return owners;
     }
 
+    // Gets the permission levels for all files shared with a specific user.
+    // Permission levels determine what actions the user can perform (read, write, etc.).
+
     public static List<String> getSharedFilePermissions(int userId) throws SQLException {
         Connection connection = DriverManager.getConnection(
                 URL,
@@ -185,11 +208,16 @@ public class FilesShareDAO {
         return permissions;
     }
 
+    // Helper method that formats raw byte sizes into readable units (B, KB, MB, GB, etc.).
+
     private static String formatFileSize(long size) {
         if (size < 1024) return size + " B";
         int z = (63 - Long.numberOfLeadingZeros(size)) / 10;
         return String.format("%.1f %sB", (double) size / (1L << (z * 10)), " KMGTPE".charAt(z));
     }
+
+    // Retrieves the actual file data (as a byte array) for a file owned by a specific user.
+    // This is what allows files to be downloaded from the database.
 
     public static byte[] getFileData(String fileName, int userId) throws SQLException {
         Connection connection = DriverManager.getConnection(
@@ -212,6 +240,9 @@ public class FilesShareDAO {
         connection.close();
         return fileData;
     }
+
+    // Gets file data for a file that was shared with the user (not owned by them).
+    // Joins file_shares and files tables to verify the user has access before returning the data.
 
     public static byte[] getSharedFileData(String fileName, int sharedWithUserId) throws SQLException {
         Connection connection = DriverManager.getConnection(
@@ -237,6 +268,8 @@ public class FilesShareDAO {
         return fileData;
     }
 
+    // Gets the file path for a file owned by a specific user.
+
     public static String getFilePath(String fileName, int userId) throws SQLException {
         Connection connection = DriverManager.getConnection(
                 URL,
@@ -258,6 +291,9 @@ public class FilesShareDAO {
         connection.close();
         return filePath;
     }
+
+    // Gets the file path for a file that was shared with the user.
+    // Same as getFilePath but for shared files instead of owned files.
 
     public static String getSharedFilePath(String fileName, int sharedWithUserId) throws SQLException {
         Connection connection = DriverManager.getConnection(

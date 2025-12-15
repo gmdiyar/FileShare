@@ -1,3 +1,7 @@
+// This class sets the window up, launches it, and switches to the login-page.fxml view.
+// As apart of the set up, it sets this JavaFX stage as the primary stage in the scene manager class. 
+// If it fails, it'll throw a runtime exception and print a fail line to console.
+
 package project.fileshare;
 
 import javafx.application.Application;

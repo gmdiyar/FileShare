@@ -5,14 +5,22 @@ import java.io.IOException;
 import java.io.InputStream;
 import java.sql.*;
 import java.util.*;
+
 import static project.fileshare.Tools.PasswordHasher.HashPassword;
 import project.fileshare.Controllers.SceneManager;
 
 public class LoginDAO {
 
+    // These static fields store database connection credentials that are loaded from a properties file.
+    // They're used by all DAO classes to connect to the MySQL database.
+
     public static final String URL;
     public static final String USER;
     public static final String SQL_PASSWORD;
+
+    // Static initialization block that runs when the class is first loaded.
+    // Reads database credentials from the db.properties file in the resources folder
+    // and assigns them to the static fields above.
 
     static {
         Properties props = new Properties();
@@ -28,6 +36,10 @@ public class LoginDAO {
             throw new RuntimeException("Failed to load database properties", e);
         }
     }
+
+    // This is the main login validation method. It checks if the username exists in the database,
+    // and if it does, retrieves the user's salt and iteration count to hash the provided password
+    // and validate it against the stored hash.
 
     public static void validateLogin(String username, String password) throws Exception {
         Connection connection = DriverManager.getConnection(
@@ -45,6 +57,9 @@ public class LoginDAO {
             }
         }
     }
+
+    // Retrieves the number of hashing iterations used for a specific user's password.
+    // This is needed to recreate the same hash when validating login attempts.
 
     public static int getIterationsFromDB(String username) throws SQLException {
         Connection connection = DriverManager.getConnection(
@@ -64,6 +79,9 @@ public class LoginDAO {
         }
     }
 
+    // Retrieves the salt (random bytes) that was used when originally hashing the user's password.
+    // The salt is unique to each user and prevents rainbow table attacks.
+
     public static byte[] getSaltByUsername(String username) throws SQLException {
         Connection connection = DriverManager.getConnection(
                 URL,
@@ -82,6 +100,10 @@ public class LoginDAO {
         }
     }
 
+    // Compares the provided password hash against the stored hash in the database.
+    // If they match, the user is logged in successfully and their user ID is stored in the
+    // SceneManager so it can be used throughout the session. Then switches to the dashboard view.
+
     public static void validatePassword(String passwordHash, String username) throws SQLException {
         Connection connection = DriverManager.getConnection(
                 URL,
@@ -95,7 +117,6 @@ public class LoginDAO {
         getPasswordHash.setString(1, username);
         getUserId.setString(1, username);
 
-
         ResultSet hashes = getPasswordHash.executeQuery();
         ResultSet userId = getUserId.executeQuery();
 
@@ -106,6 +127,4 @@ public class LoginDAO {
             }
         }
     }
-
-
 }

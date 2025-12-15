@@ -1,3 +1,8 @@
+// All buisness rules should be held in this class.
+// This inlucdes dissallowed username and password characters.
+// Methods to verify username and password strings don't contain
+// dissalowed characters are also found here. 
+
 package project.fileshare.Tools;
 
 public class Rules {
@@ -10,6 +15,4 @@ public class Rules {
     public static boolean ensurePassword(String password){
         return !password.contains(disallowedPasswordChars);
     }
-
-    //email one too
 }
